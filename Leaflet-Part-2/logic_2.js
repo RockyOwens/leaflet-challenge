@@ -1,12 +1,12 @@
-// Store our API endpoint as queryUrl and tectonicplatesUrl
+// Store API endpoint as queryUrl and tectonicplatesUrl
 var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 var tectonicplatesUrl = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json"
 
-// Perform a GET request to the query URL
+// Perform GET request to query URL
 d3.json(queryUrl).then(function (data) {
   // Console log the data retrieved 
   console.log(data);
-  // Once we get a response, send the data.features object to the createFeatures function.
+  // Once we get a response, then send the data.features object to createFeatures function
   createFeatures(data.features);
 });
 
@@ -22,21 +22,21 @@ function chooseColor(depth){
 
 function createFeatures(earthquakeData) {
 
-  // Define a function that we want to run once for each feature in the features array.
-  // Give each feature a popup that describes the place and time of the earthquake.
+  // Define function to run once for each feature in array
+  // Give each feature a pop-up describing place and time of earthquake
   function onEachFeature(feature, layer) {
     layer.bindPopup(`<h3>Location: ${feature.properties.place}</h3><hr><p>Date: ${new Date(feature.properties.time)}</p><p>Magnitude: ${feature.properties.mag}</p><p>Depth: ${feature.geometry.coordinates[2]}</p>`);
   }
 
-  // Create a GeoJSON layer that contains the features array on the earthquakeData object.
-  // Run the onEachFeature function once for each piece of data in the array.
+  // Create GeoJSON layer containing features array on earthquakeData object
+  // Run the onEachFeature function once for each data piece in array
   var earthquakes = L.geoJSON(earthquakeData, {
     onEachFeature: onEachFeature,
 
     // Point to layer used to alter markers
     pointToLayer: function(feature, latlng) {
 
-      // Determine the style of markers based on properties
+      // Determine style of markers based on properties
       var markers = {
         radius: feature.properties.mag * 20000,
         fillColor: chooseColor(feature.geometry.coordinates[2]),
@@ -48,7 +48,7 @@ function createFeatures(earthquakeData) {
     }
   });
 
-  // Send our earthquakes layer to the createMap function/
+  // Send earthquakes layer to createMap function
   createMap(earthquakes);
 }
 
@@ -76,7 +76,7 @@ function createMap(earthquakes) {
   // Create layer for tectonic plates
   tectonicPlates = new L.layerGroup();
 
-    // Perform a GET request to the tectonicplatesURL
+    // Perform GET request to the tectonicplatesURL
     d3.json(tectonicplatesUrl).then(function (plates) {
 
         // Console log the data retrieved 
@@ -87,20 +87,20 @@ function createMap(earthquakes) {
         }).addTo(tectonicPlates);
     });
 
-    // Create a baseMaps object.
+    // Create a baseMaps object
     var baseMaps = {
         "Satellite": satellite,
         "Grayscale": grayscale,
         "Outdoors": outdoors
     };
 
-    // Create an overlay object to hold our overlay.
+    // Create an overlay object to hold overlay
     var overlayMaps = {
         "Earthquakes": earthquakes,
         "Tectonic Plates": tectonicPlates
     };
     
-    // Create our map, giving it the satellite map and earthquakes layers to display on load.
+    // Create map, adding the satellite map and earthquakes layers to display on import
   var myMap = L.map("map", {
     center: [
       37.09, -95.71
@@ -125,9 +125,9 @@ function createMap(earthquakes) {
   };
   legend.addTo(myMap)
 
-  // Create a layer control.
-  // Pass it our baseMaps and overlayMaps.
-  // Add the layer control to the map.
+  // Create a layer control
+  // Pass to baseMaps and overlayMaps
+  // Add layer control to map
   L.control.layers(baseMaps, overlayMaps, {
     collapsed: false
   }).addTo(myMap);
