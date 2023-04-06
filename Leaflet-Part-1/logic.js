@@ -1,11 +1,11 @@
-// Store our API endpoint as queryUrl.
+// Store API endpoint as queryUrl.
 var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
-// Perform a GET request to the query URL
+// Perform GET request to the query URL
 d3.json(queryUrl).then(function (data) {
   // Console log the data retrieved 
   console.log(data);
-  // Once we get a response, send the data.features object to the createFeatures function.
+  // Once we get a response, then send data.features object to createFeatures function.
   createFeatures(data.features);
 });
 
@@ -26,14 +26,14 @@ function chooseColor(depth){
 
 function createFeatures(earthquakeData) {
 
-  // Define a function that we want to run once for each feature in the features array.
-  // Give each feature a popup that describes the place and time of the earthquake.
+  // Define function to run once for each feature in array.
+  // Give each feature a pop-up describing place and time of earthquake.
   function onEachFeature(feature, layer) {
     layer.bindPopup(`<h3>Location: ${feature.properties.place}</h3><hr><p>Date: ${new Date(feature.properties.time)}</p><p>Magnitude: ${feature.properties.mag}</p><p>Depth: ${feature.geometry.coordinates[2]}</p>`);
   }
 
-  // Create a GeoJSON layer that contains the features array on the earthquakeData object.
-  // Run the onEachFeature function once for each piece of data in the array.
+  // Create a GeoJSON layer containing features array on earthquakeData object.
+  // Run the onEachFeature function once for each piece of data in array.
   var earthquakes = L.geoJSON(earthquakeData, {
     onEachFeature: onEachFeature,
 
@@ -69,7 +69,7 @@ function createMap(earthquakes) {
     access_token: api_key
   });
 
-  // Create our map, giving it the grayscale map and earthquakes layers to display on load.
+  // Create our map with grayscale and earthquake layer to display on import.
   var myMap = L.map("map", {
     center: [
       37.09, -95.71
