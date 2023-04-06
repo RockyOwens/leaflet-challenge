@@ -6,7 +6,7 @@ var tectonicplatesUrl = "https://raw.githubusercontent.com/fraxen/tectonicplates
 d3.json(queryUrl).then(function (data) {
   // Console log the data retrieved 
   console.log(data);
-  // Once we get a response, then send the data.features object to createFeatures function
+  // On response, then send the data.features object to createFeatures function
   createFeatures(data.features);
 });
 
@@ -36,7 +36,7 @@ function createFeatures(earthquakeData) {
     // Point to layer used to alter markers
     pointToLayer: function(feature, latlng) {
 
-      // Determine style of markers based on properties
+      // Determine markers style based on properties
       var markers = {
         radius: feature.properties.mag * 20000,
         fillColor: chooseColor(feature.geometry.coordinates[2]),
@@ -100,7 +100,7 @@ function createMap(earthquakes) {
         "Tectonic Plates": tectonicPlates
     };
     
-    // Create map, adding the satellite map and earthquakes layers to display on import
+    // Create map, adding satellite map and earthquakes layers to display on import
   var myMap = L.map("map", {
     center: [
       37.09, -95.71
@@ -125,7 +125,7 @@ function createMap(earthquakes) {
   };
   legend.addTo(myMap)
 
-  // Create a layer control
+  // Create layer control
   // Pass to baseMaps and overlayMaps
   // Add layer control to map
   L.control.layers(baseMaps, overlayMaps, {
